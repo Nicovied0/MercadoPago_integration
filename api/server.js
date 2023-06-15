@@ -7,7 +7,7 @@ require("dotenv").config();
 const mercadopago = require("mercadopago");
 
 const clave = process.env.ACCESS_TOKEN;
-console.log(clave);
+console.log(clave,"despues del cambio");
 
 mercadopago.configure({
   access_token: clave,
