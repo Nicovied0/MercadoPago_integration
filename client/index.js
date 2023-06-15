@@ -1,7 +1,7 @@
 const mercadopago = new MercadoPago(
   "TEST-fb9f35fe-fdd7-4df3-82a9-3975d03cad9a",
   {
-    locale: "es-AR", // The most common are: 'pt-BR', 'es-AR' and 'en-US'
+    locale: "es-AR",
   }
 );
 
