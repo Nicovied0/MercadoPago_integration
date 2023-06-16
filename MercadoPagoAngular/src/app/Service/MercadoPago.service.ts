@@ -1,48 +1,48 @@
 import { Injectable } from '@angular/core';
 
-declare const MercadoPago: any; // Declara la variable global MercadoPago
-
 @Injectable({
   providedIn: 'root'
 })
 export class MercadopagoService {
   private mercadopago: any;
-  private preferenceId: string = '';
 
   constructor() {
-    this.mercadopago = (window as any).MercadoPago; // Accede a la variable global MercadoPago
-    if (!this.mercadopago) {
-      console.error('La librería de Mercado Pago no se ha cargado correctamente.');
+    // Accede a la variable global MercadoPago
+    this.mercadopago = (window as any).MercadoPago;
+
+    if (!this.mercadopago || !this.mercadopago.configure) {
+      console.error('La librería de Mercado Pago no se ha cargado correctamente o no se encuentra la función configure.');
     } else {
       this.initializeMercadoPago();
     }
   }
 
-  private initializeMercadoPago() {
+  public initializeMercadoPago() {
     this.mercadopago.configure({
-      // Configura los parámetros necesarios
       publicKey: 'TEST-fb9f35fe-fdd7-4df3-82a9-3975d03cad9a',
       locale: 'es-AR',
     });
   }
 
-  createPreference(orderData: any): Promise<any> {
-    return fetch('http://localhost:8080/create_preference', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderData),
-    })
-      .then((response) => response.json())
-      .then((preference) => {
-        this.preferenceId = preference.id;
-        return preference;
-      })
-      .catch(() => {
-        alert('Unexpected error');
-      });
-  }
+  public createCheckoutButton(preferenceId: string) {
+    const bricksBuilder = this.mercadopago.bricks();
 
-  
+    const renderComponent = async (bricksBuilder: any) => {
+      await bricksBuilder.create(
+        'wallet',
+        'button-checkout', // class/id where the payment button will be displayed
+        {
+          initialization: {
+            preferenceId: preferenceId,
+          },
+          callbacks: {
+            onError: (error: any) => console.error(error),
+            onReady: () => { },
+          },
+        }
+      );
+    };
+
+    renderComponent(bricksBuilder);
+  }
 }

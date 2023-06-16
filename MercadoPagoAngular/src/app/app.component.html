@@ -4,7 +4,10 @@
     <h2>{{ producto.nombre }}</h2>
     <h3>${{ producto.precio }}</h3>
   </div>
-  <button id="checkout-btn">Comprar</button>
+  <div>
+    <h2>comprar este producto a {{precioTotal}}</h2>
+  </div>
+  <button id="checkout-btn" (click)="comprar()">Comprar</button>
   <div id="button-checkout"></div>
   <div></div>
 </div>
